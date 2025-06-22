@@ -1,0 +1,32 @@
+name: Daily Repository Update
+
+on:
+  schedule:
+    # Runs daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to commit/push
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step containing your email
+      - name: Update repository (23f1002254@ds.study.iitm.ac.in)
+        run: |
+          # Create/update a timestamp file
+          echo "Last updated: $(date -u)" > update.txt
+          
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Commit and push changes
+          git add update.txt
+          git commit -m "Daily automated commit [skip ci]"
+          git push
